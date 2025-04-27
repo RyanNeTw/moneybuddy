@@ -10,8 +10,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 
-import java.sql.Date;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -24,12 +27,16 @@ public class Account implements UserDetails {
     @Id
     private String id;
     private String email;
+
+    @JsonIgnore
     private String password;
+    @JsonIgnore
     private String pin;
+    
     private PlanType planType;
     private boolean subscriptionStatus;
-    private Date createdAt;
-    private Date updatedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
     @DBRef
     private List<SubAccount> subAccounts;
     private Role role;

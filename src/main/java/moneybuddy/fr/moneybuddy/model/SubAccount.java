@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -18,9 +18,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class SubAccount {
     @Id
     private String id;
-    private String accountId;
+    private String userId;
     private String name;
     private SubAccountRole role;
-    private Date createdAt;
+    private LocalDateTime createdAt;
     private boolean isActive;
 }

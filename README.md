@@ -47,3 +47,25 @@ You can know dev, enjoy !
 | :--------- | :------- | :------------ |
 | `email`    | `string` | **Required**. |
 | `password` | `string` | **Required**. |
+
+#### Get Me
+
+```http
+  GET /api/auth/me
+```
+
+| Parameter  | Type     | Description                          |
+| :--------- | :------- | :----------------------------------- |
+| `JwtToken` | `string` | **Required**. Authorization : Bearer |
+
+#### SubAccount Login
+
+```http
+  GET /api/auth/subAccount/login
+```
+
+| Parameter  | Type     | Description                         |
+| :--------- | :------- | :---------------------------------- |
+| `JwtToken` | `string` | **Required**. Authorization: Bearer |
+| `id`       | `string` | **Required**.                       |
+| `pin`      | `string` | **Required For Parent SubAccount**. |

@@ -1,6 +1,5 @@
 package moneybuddy.fr.moneybuddy.dtos;
 
-import java.time.LocalDateTime;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -9,7 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import moneybuddy.fr.moneybuddy.model.PlanType;
 
 @Data
 @Builder
@@ -31,14 +29,5 @@ public class RegisterRequest {
     @NotBlank
     @Size(min = 4, max = 4)
     private String pin;
-
-    @Builder.Default
-    private LocalDateTime createdAt = LocalDateTime.now(); 
-
-    @Builder.Default
-    private boolean subscriptionStatus = false;
-
-    @Builder.Default
-    private PlanType planType = PlanType.FREE; 
 }
 

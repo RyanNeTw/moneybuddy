@@ -5,6 +5,8 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import moneybuddy.fr.moneybuddy.model.SubAccountRole;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,6 +37,25 @@ public class JwtService {
 
     public String generateToken(UserDetails userDetails) {
         return generateToken(new HashMap<>(), userDetails);
+    }
+
+    public String generateSubAccountToken(String subAccountId, String email, SubAccountRole role) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("subAccountId", subAccountId);
+        claims.put("email", email);
+        claims.put("role", role.name());
+
+        return Jwts.builder()
+            .setClaims(claims)
+            .setSubject(email)
+            .setIssuedAt(new Date())
+            .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
+            .signWith(getSignInKey(), SignatureAlgorithm.HS256)
+            .compact();
+    }
+
+    public String extractSubAccountId(String token) {
+        return extractClaim(token, claims -> claims.get("subAccountId", String.class));
     }
 
     public String generateToken(
