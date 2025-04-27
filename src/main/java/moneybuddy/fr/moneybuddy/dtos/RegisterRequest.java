@@ -1,0 +1,44 @@
+package moneybuddy.fr.moneybuddy.dtos;
+
+import java.time.LocalDateTime;
+
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import moneybuddy.fr.moneybuddy.model.PlanType;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class RegisterRequest {
+    @NotBlank
+    @Email
+    private String email;
+    
+    @NotBlank
+    @Size(min = 8)
+    private String password;
+    
+    @NotBlank
+    @Size(min = 8)
+    private String confirmPassword;
+    
+    @NotBlank
+    @Size(min = 4, max = 4)
+    private String pin;
+
+    @Builder.Default
+    private LocalDateTime createdAt = LocalDateTime.now(); 
+
+    @Builder.Default
+    private boolean subscriptionStatus = false;
+
+    @Builder.Default
+    private PlanType planType = PlanType.FREE; 
+}
+
