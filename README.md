@@ -18,8 +18,9 @@ docker compose up --build
 
 ### Third step
 
-Go to => [Localhost](http://localhost:8080)
-You can know dev, envoy !
+Go to [Localhost](http://localhost:8080)
+
+You can know dev, enjoy !
 
 ## API Reference
 
