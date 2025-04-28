@@ -61,7 +61,7 @@ You can know dev, enjoy !
 #### SubAccount Login
 
 ```http
-  GET /api/auth/subAccount/login
+  POST /api/auth/subAccount/login
 ```
 
 | Parameter  | Type     | Description                         |
@@ -69,3 +69,13 @@ You can know dev, enjoy !
 | `JwtToken` | `string` | **Required**. Authorization: Bearer |
 | `id`       | `string` | **Required**.                       |
 | `pin`      | `string` | **Required For Parent SubAccount**. |
+
+#### Get SubAccount Me
+
+```http
+  GET /api/auth/subAccount/me
+```
+
+| Parameter  | Type     | Description                          |
+| :--------- | :------- | :----------------------------------- |
+| `JwtToken` | `string` | **Required**. Authorization : Bearer |

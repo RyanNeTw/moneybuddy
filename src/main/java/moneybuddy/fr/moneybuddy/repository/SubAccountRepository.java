@@ -11,11 +11,8 @@ import java.util.List;
 @Repository
 public interface SubAccountRepository extends MongoRepository<SubAccount, String> {
 
-    List<SubAccount> findByUserId(String userId);
 
     List<SubAccount> findByIsActive(boolean isActive);
-
     List<SubAccount> findByRole(SubAccountRole role);
 
-    void deleteAllByUserId(String userId);
 }

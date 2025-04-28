@@ -39,16 +39,17 @@ public class JwtService {
         return generateToken(new HashMap<>(), userDetails);
     }
 
-    public String generateSubAccountToken(String subAccountId, String email, SubAccountRole role) {
+    public String generateSubAccountToken(String subAccountId, String id,String email, SubAccountRole role) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("subAccountId", subAccountId);
         claims.put("email", email);
         claims.put("role", role.name());
+        claims.put("id", id);
 
         return Jwts.builder()
             .setClaims(claims)
             .setSubject(email)
-            .setIssuedAt(new Date())
+            .setIssuedAt(new Date(System.currentTimeMillis()))
             .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
             .signWith(getSignInKey(), SignatureAlgorithm.HS256)
             .compact();
@@ -67,7 +68,7 @@ public class JwtService {
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
+                .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }

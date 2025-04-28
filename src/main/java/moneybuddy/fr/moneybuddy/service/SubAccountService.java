@@ -3,7 +3,6 @@ package moneybuddy.fr.moneybuddy.service;
 import moneybuddy.fr.moneybuddy.dtos.SubAccountDto;
 import moneybuddy.fr.moneybuddy.model.Account;
 import moneybuddy.fr.moneybuddy.model.SubAccount;
-import moneybuddy.fr.moneybuddy.model.SubAccountRole;
 import moneybuddy.fr.moneybuddy.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;

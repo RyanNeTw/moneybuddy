@@ -18,7 +18,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class SubAccount {
     @Id
     private String id;
-    private String userId;
+    private String accountId;
     private String name;
     private SubAccountRole role;
     private LocalDateTime createdAt;

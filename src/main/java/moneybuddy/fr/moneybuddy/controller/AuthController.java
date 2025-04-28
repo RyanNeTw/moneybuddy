@@ -5,6 +5,7 @@ import moneybuddy.fr.moneybuddy.dtos.AuthResponse;
 import moneybuddy.fr.moneybuddy.dtos.AuthSubAccountRequest;
 import moneybuddy.fr.moneybuddy.dtos.RegisterRequest;
 import moneybuddy.fr.moneybuddy.model.Account;
+import moneybuddy.fr.moneybuddy.model.SubAccount;
 import moneybuddy.fr.moneybuddy.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -50,5 +51,13 @@ public class AuthController {
     ) {
         String token = authHeader.substring(7);
         return service.authenticateSubAccount(request, token);
+    }
+
+    @GetMapping("/subAccount/me")
+    public ResponseEntity<SubAccount> getSubAccountMe(
+        @RequestHeader("Authorization") String authHeader
+    ) {
+        String token = authHeader.substring(7);
+        return service.getSubAccountMe(token);
     }
 }

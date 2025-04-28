@@ -5,18 +5,16 @@ import moneybuddy.fr.moneybuddy.dtos.AuthResponse;
 import moneybuddy.fr.moneybuddy.dtos.AuthSubAccountRequest;
 import moneybuddy.fr.moneybuddy.dtos.RegisterRequest;
 import moneybuddy.fr.moneybuddy.model.Account;
-import moneybuddy.fr.moneybuddy.model.PlanType;
 import moneybuddy.fr.moneybuddy.model.Role;
 import moneybuddy.fr.moneybuddy.model.SubAccount;
 import moneybuddy.fr.moneybuddy.model.SubAccountRole;
+import moneybuddy.fr.moneybuddy.model.PlanType;
 import moneybuddy.fr.moneybuddy.repository.AccountRepository;
 import moneybuddy.fr.moneybuddy.repository.SubAccountRepository;
 import moneybuddy.fr.moneybuddy.utils.CheckByRegex;
 import moneybuddy.fr.moneybuddy.utils.CreateDefaultSubAccounts;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +31,6 @@ public class AuthService {
     private final SubAccountRepository subAccountRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
-    private final AuthenticationManager authenticationManager;
     private final CheckByRegex checkByRegex;
     private final CreateDefaultSubAccounts createDefaultSubAccounts;
 
@@ -70,7 +67,7 @@ public class AuthService {
             return response("Pin doit avoir 4 chiffres" ,HttpStatus.BAD_REQUEST);
         }
 
-        var account = Account.builder()
+        Account account = Account.builder()
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .pin(request.getPin())
@@ -84,7 +81,7 @@ public class AuthService {
 
         List<SubAccount> subAccounts = createDefaultSubAccounts.createDefaultSubAccounts();
         for (SubAccount subAccount : subAccounts) {
-            subAccount.setUserId(account.getId());
+            subAccount.setAccountId(account.getId());
         }
 
         subAccountRepository.saveAll(subAccounts);
@@ -92,7 +89,7 @@ public class AuthService {
         account.setSubAccounts(subAccounts);
         repository.save(account);
         
-        var jwtToken = jwtService.generateToken(account);
+        String jwtToken = jwtService.generateToken(account);
 
         return ResponseEntity
             .status(HttpStatus.CREATED)
@@ -101,18 +98,10 @@ public class AuthService {
                 .build());
     }
 
-    public ResponseEntity<AuthResponse> authenticate(AuthRequest request) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()
-                )
-        );
-        
-        var account = repository.findByEmail(request.getEmail())
-        .orElseThrow();
+    public ResponseEntity<AuthResponse> authenticate(AuthRequest request) {        
+        Account account = repository.findByEmail(request.getEmail()).orElseThrow();
 
-        var jwtToken = jwtService.generateToken(account);
+        String jwtToken = jwtService.generateToken(account);
 
         return ResponseEntity
             .status(HttpStatus.ACCEPTED)
@@ -131,22 +120,31 @@ public class AuthService {
     }
 
     public ResponseEntity<AuthResponse> authenticateSubAccount(AuthSubAccountRequest request, String token) {
-        String id = request.getId();
+        String subAccountId = request.getId();
         String pin = request.getPin();
         String email = jwtService.extractUsername(token);
 
-        SubAccount subAccount = subAccountRepository.findById(id).orElseThrow();
+        SubAccount subAccount = subAccountRepository.findById(subAccountId).orElseThrow();
         Account account = repository.findByEmail(email).orElseThrow();
 
         if (SubAccountRole.PARENT.equals(subAccount.getRole()) && !pin.equals(account.getPin())) {
             return response("Mauvais pin pour le compte parent", HttpStatus.BAD_REQUEST);
         }        
 
-        var jwtToken = jwtService.generateSubAccountToken(id, email, subAccount.getRole());
+        var jwtToken = jwtService.generateSubAccountToken(subAccountId, account.getId(), email, subAccount.getRole());
         return ResponseEntity
             .status(HttpStatus.ACCEPTED)
             .body(AuthResponse.builder()
                 .token(jwtToken)
                 .build());
+    }
+
+    public ResponseEntity<SubAccount> getSubAccountMe(String token) {
+        String subAccountId = jwtService.extractSubAccountId(token);
+        SubAccount subAccount = subAccountRepository.findById(subAccountId).orElseThrow();
+
+        return ResponseEntity
+            .status(HttpStatus.ACCEPTED)
+            .body(subAccount);
     }
 }
