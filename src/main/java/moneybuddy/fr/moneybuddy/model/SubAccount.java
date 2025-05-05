@@ -22,5 +22,6 @@ public class SubAccount {
     private String name;
     private SubAccountRole role;
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
     private boolean isActive;
 }

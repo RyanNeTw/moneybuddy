@@ -34,8 +34,10 @@ public class Account implements UserDetails {
     
     private PlanType planType;
     private boolean subscriptionStatus;
+
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    
     @DBRef
     private List<SubAccount> subAccounts;
     private Role role;
