@@ -96,6 +96,12 @@ public class TaskService {
 
     public ResponseEntity<AuthResponse> completeTask (String token, String taskId) {
         String subAccountId = jwtService.extractSubAccountId(token);
+        SubAccountRole role = jwtService.extractSubAccountRole(token);
+        
+        if (!SubAccountRole.PARENT.equals(role)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
         Optional<Task> optionalTask = taskRepository.findByIdAndSubaccountIdParent(taskId, subAccountId);
         
         if (optionalTask.isPresent()) {
