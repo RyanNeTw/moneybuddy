@@ -13,7 +13,11 @@ insert the right values to variables
 ### Second step
 
 ```bash
-docker compose up --build
+docker build -t moneybuddy-app .
+```
+
+```bash
+docker run -p 8080:8080 moneybuddy-app
 ```
 
 ### Third step
