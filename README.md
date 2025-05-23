@@ -26,6 +26,14 @@ Go to [Localhost](http://localhost:8080)
 
 You can know dev, enjoy !
 
+### Install dependencies
+
+Skip test for now
+
+```bash
+mvn clean install -DskipTests
+```
+
 ## API Reference
 
 ### Auth
