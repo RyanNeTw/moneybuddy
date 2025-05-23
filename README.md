@@ -17,7 +17,7 @@ docker build -t moneybuddy-app .
 ```
 
 ```bash
-docker run -p 8080:8080 moneybuddy-app
+docker run --env-file .env -p 8080:8080 moneybuddy-app
 ```
 
 ### Third step
